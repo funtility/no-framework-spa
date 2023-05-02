@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    font-family: sans-serif;
+    color: #ddd;
+}
+
+body {
+    background-color: rgb(30,35,40);
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+#top-bar {
+    padding: 12px;
+    font-size: x-large;
+    box-shadow: 0 0 40px #777;
+}
