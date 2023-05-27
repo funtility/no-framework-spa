@@ -4,8 +4,7 @@
  * remove this class and refrences to it in the API class
  * below.
  */
-class APIResponse
-{
+class APIResponse {
     constructor(data = {})
     {
         this.errors = data.hasOwnProperty('errors') ? data.errors : []
@@ -18,8 +17,13 @@ class APIResponse
     }
 }
 
-class API
-{
+/**
+ * A basic implementation of the four most commonly used
+ * http verbs: GET, PUT, POST, and DELETE.
+ * 
+ * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+ */
+class API {
     constructor(apiBaseUrl)
     {
         this.apiBaseUrl = apiBaseUrl
@@ -28,21 +32,21 @@ class API
     //#region General Request Methods
 
     /**
+     * A wrapper around the fetch api using the GET verb.
      * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/Request/method
      * @param {string} endpoint
      * The string value of the endpoint without
      * the leading slash. This will be appended
-     * to the base Funtility API URL.
+     * to the API's base URL.
      * @param {[[string,string]]} params 
      * A two dimensional array of key value pairs: 
      * E.G. [ [ "id" , 10 ] ]
      * @returns 
-     * See the Funtility API documentation for
+     * See your API's documentation for
      * the return type of the endpoint.
-     * http://api.funtility.com/index.html
      */
-    async GET(endpoint,params = [])
-    {
+    async GET(endpoint,params = []) {
         let init = this.getInit("GET")
         endpoint = `${endpoint}${this.getQueryParamString(params)}`
         const data = await this.request(endpoint, init)
@@ -50,21 +54,21 @@ class API
     }
     
     /**
+     * A wrapper around the fetch api using the PUT verb.
      * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/Request/method
      * @param {string} endpoint
      * The string value of the endpoint without
      * the leading slash. This will be appended
-     * to the base Funtility API URL.
+     * to the API's base URL.
      * @param {[[string,string]]} params 
      * A two dimensional array of key value pairs: 
      * E.G. [ [ "id" , 10 ] ]
      * @returns 
-     * See the Funtility API documentation for
+     * See your API's documentation for
      * the return type of the endpoint.
-     * http://api.funtility.com/index.html
      */
-    async PUT(endpoint,body,params = [])
-    {
+    async PUT(endpoint,body,params = []) {
         let init = this.getInit("PUT",body)
         endpoint = `${endpoint}${this.getQueryParamString(params)}`
         const data = await this.request(endpoint, init)
@@ -72,42 +76,42 @@ class API
     }
     
     /**
+     * A wrapper around the fetch api using the POST verb.
      * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/Request/method
      * @param {string} endpoint
      * The string value of the endpoint without
      * the leading slash. This will be appended
-     * to the base Funtility API URL.
+     * to the API's base URL.
      * @param {[[string,string]]} params 
      * A two dimensional array of key value pairs: 
      * E.G. [ [ "id" , 10 ] ]
      * @returns 
-     * See the Funtility API documentation for
+     * See your API's documentation for
      * the return type of the endpoint.
-     * http://api.funtility.com/index.html
      */
-    async POST(endpoint,body)
-    {
+    async POST(endpoint,body) {
         let init = this.getInit("POST",body)
         const data = await this.request(endpoint, init)
         return new APIResponse(data)
     }
     
     /**
+     * A wrapper around the fetch api using the DELETE verb.
      * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/Request/method
      * @param {string} endpoint
      * The string value of the endpoint without
      * the leading slash. This will be appended
-     * to the base Funtility API URL.
+     * to the API's base URL.
      * @param {[[string,string]]} params 
      * A two dimensional array of key value pairs: 
      * E.G. [ [ "id" , 10 ] ]
      * @returns 
-     * See the Funtility API documentation for
+     * See your API's documentation for
      * the return type of the endpoint.
-     * http://api.funtility.com/index.html
      */
-    async DELETE(endpoint,params = [])
-    {
+    async DELETE(endpoint,params = []) {
         let init = this.getInit("DELETE")
         endpoint = `${endpoint}${this.getQueryParamString(params)}`
         const data = await this.request(endpoint, init)
@@ -116,10 +120,16 @@ class API
 
     //#endregion
 
-    //#region Request Helper Methods
+    //#region Request Builder Methods
 
-    getInit(method, body = {})
-    {
+    /**
+     * Constructs the options object for the Fetch API.
+     * @param {HTTP Method} method GET | PUT | POST | DELETE
+     * @param {*} body 
+     * @returns The return type of your API's endpoint
+     * being called.
+     */
+    getInit(method, body = {}) {
         if (method == "GET" || method == "DELETE") {
             return {
                 method: method,
@@ -136,15 +146,25 @@ class API
         }
     }
     
-    getHeaders()
-    {
+    /**
+     * Builds the Header object for the api call. Modify this with
+     * any custom headers required for your api.
+     * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/Request/headers
+     * @returns A new Header object.
+     */
+    getHeaders() {
         let headers = new Headers()
         headers.append('Content-Type', 'application/json;charset=UTF-8')
         return headers
     }
 
-    getQueryParamString(params = [])
-    {
+    /**
+     * Constructs the query parameter part of a web request.
+     * @param {[[key,value]]} params A two dimentional array of key value pairs
+     * @returns A formatted query parameter string.
+     */
+    getQueryParamString(params = []) {
         let result = params.length > 0 ? "?" : ""
         params.forEach(keyVal => {
             let amp = result === "?" ? "" : "&"
@@ -153,8 +173,17 @@ class API
         return result
     }
 
-    async request(endpoint,init)
-    {
+    /**
+     * A wrapper around the Fetch API.
+     * 
+     * https://developer.mozilla.org/en-US/docs/Web/API/fetch
+     * @param {string} endpoint The endpoint part of the web url to send the
+     * request to including any query parameters.
+     * @param {*} init The options for the request. These are built by the
+     * getInit method.
+     * @returns 
+     */
+    async request(endpoint,init) {
         const res = await fetch(`${this.apiBaseUrl}${endpoint}`, init)
         return await res.json()
     }

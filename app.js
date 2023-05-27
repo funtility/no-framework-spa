@@ -32,12 +32,6 @@ class App {
 
    async load(params)
    {
-      //Optional: If you are using authentication this step can be used.
-      //          This example uses Funtility as an identity provider.
-      if (!api.userIsSignedIn) {
-         state.currentPage = 'home'
-      }
-
       let res
       switch(state.currentPage) {
          case 'home':
@@ -119,10 +113,18 @@ class PageBase {
     }
 
    /**
-    * Overrideable method for implementations of the Page class.
-    * This is called when the site is loaded and a 'pg' query parameter
-    * is found. This should be overriden by the inheriting PageBase
-    * class if it needs to perform any async loading.
+    * 
+    */
+   get element()
+   {
+     return document.createElement('div')
+   }
+
+   /**
+    * Overridable method for implementations of the Page class.
+    * This is called when the site is loaded. This should be 
+    * overriden by the inheriting PageBase class if it needs
+    * to perform any async loading.
     */
    async load() { }
 }
