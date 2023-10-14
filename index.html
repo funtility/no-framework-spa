@@ -1,7 +1,7 @@
 <!DOCTYPE htlm>
 <html lang="en">
     <head>
-        <title>Site</title>
+        <title>SiteName</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="./Favicon.png" type="image/x-icon" />
@@ -20,8 +20,8 @@
     <script>
         let state, api, app
         window.onload = async () => {
-            state = new State("Site:Portal")
-            api = window.location.host ? new API("https://api.someSite.com") : new API('http://localhost:5194/')
+            state = new State("SiteName:Portal")
+            api = window.location.host ? new FuntilityAPI("SiteMame") : new FuntilityAPI('SiteName', 'http://localhost:5194/')
             app = new App('Site')
             await app.load()
         }
