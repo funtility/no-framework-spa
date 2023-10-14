@@ -21,7 +21,7 @@
         let state, api, app
         window.onload = async () => {
             state = new State("SiteName:Portal")
-            api = window.location.host ? new FuntilityAPI("SiteMame") : new FuntilityAPI('SiteName', 'http://localhost:5194/')
+            api = window.location.host ? new FuntilityAPI("SiteName") : new FuntilityAPI('SiteName', 'http://localhost:5194/')
             app = new App('Site')
             await app.load()
         }
